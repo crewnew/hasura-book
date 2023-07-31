@@ -1,0 +1,23 @@
+query GetHasuraSettings($appId: uuid!) {
+  config(appID: $appId, resolve: true) {
+    id: __typename
+    __typename
+    hasura {
+      version
+      settings {
+        enableAllowList
+        enableRemoteSchemaPermissions
+        enableConsole
+        devMode
+        corsDomain
+        enabledAPIs
+      }
+      logs {
+        level
+      }
+      events {
+        httpPoolSize
+      }
+    }
+  }
+}

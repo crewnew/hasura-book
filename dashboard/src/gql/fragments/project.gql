@@ -1,0 +1,69 @@
+fragment Project on apps {
+  id
+  slug
+  name
+  repositoryProductionBranch
+  subdomain
+  isProvisioned
+  createdAt
+  desiredState
+  nhostBaseFolder
+  providersUpdated
+  config(resolve: true) {
+    observability {
+      grafana {
+        adminPassword
+      }
+    }
+    hasura {
+      adminSecret
+      settings {
+        enableConsole
+      }
+    }
+  }
+  featureFlags {
+    description
+    id
+    name
+    value
+  }
+  appStates(order_by: { createdAt: desc }, limit: 1) {
+    id
+    appId
+    message
+    stateId
+    createdAt
+  }
+  region {
+    id
+    countryCode
+    awsName
+    domain
+    city
+  }
+  plan {
+    id
+    name
+    price
+    isFree
+  }
+  githubRepository {
+    fullName
+  }
+  deployments(limit: 4, order_by: { deploymentStartedAt: desc }) {
+    id
+    commitSHA
+    commitMessage
+    commitUserName
+    deploymentStartedAt
+    deploymentEndedAt
+    commitUserAvatarUrl
+    deploymentStatus
+  }
+  creator {
+    id
+    email
+    displayName
+  }
+}

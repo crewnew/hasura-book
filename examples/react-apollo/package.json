@@ -1,0 +1,71 @@
+{
+  "name": "@nhost-examples/react-apollo",
+  "version": "0.1.14",
+  "private": true,
+  "dependencies": {
+    "@apollo/client": "^3.7.14",
+    "@mantine/core": "^4.2.12",
+    "@mantine/dropzone": "^4.2.12",
+    "@mantine/hooks": "^4.2.12",
+    "@mantine/notifications": "^4.2.12",
+    "@mantine/prism": "^4.2.12",
+    "@nhost/react": "*",
+    "@nhost/react-apollo": "*",
+    "graphql": "16.6.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.8.0",
+    "react-router": "^6.11.1",
+    "react-router-dom": "^6.11.1",
+    "tabler-icons-react": "^1.56.0"
+  },
+  "scripts": {
+    "dev": "vite --host localhost --port 3000",
+    "generate": "graphql-codegen --config graphql.config.yaml",
+    "install-browsers": "pnpm dlx playwright@1.31.0 install --with-deps",
+    "e2e": "pnpm e2e:start-backend && pnpm e2e:test",
+    "e2e:test": "pnpm install-browsers && pnpm dlx playwright@1.31.0 test; nhost down",
+    "e2e:start-backend": "cp .secrets.example .secrets && nhost up",
+    "e2e:start-ui": "run-s build preview",
+    "build": "vite build",
+    "preview": "vite preview --host localhost --port 3000",
+    "prettier": "prettier --check .",
+    "prettier:fix": "prettier --write .",
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix",
+    "verify": "run-p prettier lint",
+    "verify:fix": "run-p prettier:fix lint:fix"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
+    "@graphql-codegen/cli": "^2.16.5",
+    "@nuintun/qrcode": "^3.3.2",
+    "@playwright/test": "1.31.0",
+    "@types/pngjs": "^6.0.1",
+    "@types/react": "^18.2.14",
+    "@types/react-dom": "^18.2.6",
+    "@types/totp-generator": "^0.0.4",
+    "@vitejs/plugin-react": "^3.1.0",
+    "@xstate/inspect": "^0.6.5",
+    "dotenv": "^16.0.3",
+    "jsqr": "^1.4.0",
+    "pngjs": "^7.0.0",
+    "totp-generator": "^0.0.13",
+    "typescript": "^4.9.5",
+    "vite": "^4.3.7",
+    "ws": "^8.13.0",
+    "xstate": "^4.37.2"
+  }
+}

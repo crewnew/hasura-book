@@ -1,0 +1,51 @@
+name: Install Node and package dependencies
+description: 'Install Node dependencies with pnpm'
+inputs:
+  TURBO_TOKEN:
+    description: 'Turborepo token'
+  TURBO_TEAM:
+    description: 'Turborepo team'
+  BUILD:
+    description: 'Build packages'
+    default: 'default'
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: pnpm/action-setup@v2.2.4
+      with:
+        version: 8.6.2
+        run_install: false
+    - name: Get pnpm cache directory
+      id: pnpm-cache-dir
+      shell: bash
+      run: echo "dir=$(pnpm store path)" >> $GITHUB_OUTPUT
+    - uses: actions/cache@v3
+      id: pnpm-cache
+      with:
+        path: ${{ steps.pnpm-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
+        restore-keys: ${{ runner.os }}-node-
+    - name: Use Node.js v18
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+    - shell: bash
+      name: Install packages
+      run: pnpm install --frozen-lockfile
+    # * Build all Nhost packages as they are all supposed to be tested.
+    # * They are reused through the Turborepo cache
+    - shell: bash
+      name: Build packages
+      if: ${{ inputs.BUILD == 'all' }}
+      run: pnpm run build:all
+      env:
+        TURBO_TOKEN: ${{ inputs.TURBO_TOKEN }}
+        TURBO_TEAM: ${{ inputs.TURBO_TEAM }}
+    - shell: bash
+      name: Build everything in the monorepo
+      if: ${{ inputs.BUILD == 'default' }}
+      run: pnpm run build
+      env:
+        TURBO_TOKEN: ${{ inputs.TURBO_TOKEN }}
+        TURBO_TEAM: ${{ inputs.TURBO_TEAM }}

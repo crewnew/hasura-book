@@ -1,0 +1,9 @@
+packages:
+  - 'packages/**'
+  - 'integrations/**'
+  - 'dashboard'
+  - 'docs'
+  - '!**/test/**'
+  - '!out/**'
+  - 'examples/**'
+  - '!**/functions'
