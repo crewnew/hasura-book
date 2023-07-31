@@ -27,7 +27,7 @@ services:
       - "./letsencrypt:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
   postgres:
-    image: postgres:13
+    image: postgres
     restart: always
     volumes:
       - ./data/db:/var/lib/postgresql/data
@@ -35,6 +35,7 @@ services:
     environment:
       POSTGRES_PASSWORD: postgrespassword
   graphql-engine:
+    container_name: "graphql-engine"
     image: hasura/graphql-engine:v2.15.2
     depends_on:
       - postgres
@@ -62,6 +63,7 @@ services:
       - "traefik.http.routers.graphql_https.entrypoints=websecure"
   auth:
     image: nhost/hasura-auth:0.16.2
+    container_name: "auth"
     depends_on:
       - postgres
       - graphql-engine
@@ -71,8 +73,8 @@ services:
       HASURA_GRAPHQL_GRAPHQL_URL: http://graphql-engine:8080/v1/graphql
       HASURA_GRAPHQL_JWT_SECRET: ${HASURA_GRAPHQL_JWT_SECRET}
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
-      AUTH_CLIENT_URL: "https://ebeebiraamat.ee"
-      AUTH_ACCESS_CONTROL_ALLOWED_REDIRECT_URLS: 'https://ebeebiraamat.ee,ebeebiraamat://'
+      AUTH_CLIENT_URL: "https://crewnew.com"
+      AUTH_ACCESS_CONTROL_ALLOWED_REDIRECT_URLS: 'https://crewnew.com,crewnew://'
       AUTH_EMAIL_SIGNIN_EMAIL_VERIFIED_REQUIRED: 'false'
       AUTH_SERVER_URL: "${API_DOMAIN}/v1/auth"
       AUTH_SMTP_HOST: ${AUTH_SMTP_HOST}
@@ -97,7 +99,8 @@ services:
       - "traefik.http.routers.auth_https.tls.certresolver=le"
       - "traefik.http.routers.auth_https.entrypoints=websecure"
   storage:
-    image: nhost/hasura-storage:0.2.1
+    image: nhost/hasura-storage:0.3.1
+    container_name: "storage"
     depends_on:
       - postgres
       - graphql-engine
@@ -134,7 +137,8 @@ services:
       - serve
       - security-opt seccomp=unconfined
   functions:
-    image: nhost/functions:latest
+    image: nhost/functions:0.1.8
+    container_name: "functions"
     labels:
       - "traefik.enable=true"
       - "traefik.http.middlewares.strip-functions.stripprefix.prefixes=/v1/functions"
