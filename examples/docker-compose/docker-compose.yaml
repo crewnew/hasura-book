@@ -35,7 +35,6 @@ services:
     environment:
       POSTGRES_PASSWORD: postgrespassword
   graphql-engine:
-    container_name: "graphql-engine"
     image: hasura/graphql-engine:v2.15.2
     depends_on:
       - postgres
@@ -63,7 +62,6 @@ services:
       - "traefik.http.routers.graphql_https.entrypoints=websecure"
   auth:
     image: nhost/hasura-auth:0.16.2
-    container_name: "auth"
     depends_on:
       - postgres
       - graphql-engine
@@ -100,7 +98,6 @@ services:
       - "traefik.http.routers.auth_https.entrypoints=websecure"
   storage:
     image: nhost/hasura-storage:0.3.1
-    container_name: "storage"
     depends_on:
       - postgres
       - graphql-engine
@@ -138,7 +135,6 @@ services:
       - security-opt seccomp=unconfined
   functions:
     image: nhost/functions:0.1.8
-    container_name: "functions"
     labels:
       - "traefik.enable=true"
       - "traefik.http.middlewares.strip-functions.stripprefix.prefixes=/v1/functions"
