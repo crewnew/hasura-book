@@ -34,6 +34,8 @@ services:
       - ./initdb.d:/docker-entrypoint-initdb.d:ro
     environment:
       POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
   graphql-engine:
     image: hasura/graphql-engine:v2.15.2
     depends_on:
